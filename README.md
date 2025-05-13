@@ -1,4 +1,3 @@
-# mimic2-mortality-prediction
 # Time-Series Feature Engineering and Mortality Prediction with MIMIC-II
 
 This project demonstrates how to process and model time-series ICU data from the PhysioNet 2012 Challenge dataset, which is derived from MIMIC-II but structured specifically for the challenge task. It covers everything from raw .txt files per patient to engineered features, imputation, and model comparison.
@@ -9,7 +8,6 @@ This project demonstrates how to process and model time-series ICU data from the
 * **Language:** R
 * **Libraries:** `data.table`, `tidyverse`, `tidymodels`, `skimr`, `naniar`, `bonsai`, `themIS`
 * **Dataset:** [The PhysioNet/Computing in Cardiology Challenge 2012](https://physionet.org/content/challenge-2012/1.0.0/)
----
 
 ## 📂 Project Workflow
 
@@ -49,8 +47,6 @@ Time-series variables were engineered based on their clinical measurement freque
 
 * **Static variables**: Extracted baseline values at time = 0.
 
----
-
 **Continuous Time-Series Variables**
 
 * **Frequent variables** (10+/day):  
@@ -64,8 +60,6 @@ Time-series variables were engineered based on their clinical measurement freque
 * **Rare variables** (only ordered as needed):  
   - **Features**: Median, trend, `num_obs`, first value, and missing indicator  
   - **Aggregation**: Over the entire 48-hour period.
-
----
 
 **Categorical Time-Series Variable**
 
@@ -82,20 +76,15 @@ Time-series variables were engineered based on their clinical measurement freque
       - 3 = long (30–42 hours)  
       - 4 = extended (> 42 hours)
 
----
-
 **Additional Notes:**
 - *First value*: Often reflects the patient’s baseline status before therapeutic interventions, which can be highly predictive.
 - *Trend*: Defined as `last - first` value; captures the direction and magnitude of change.
 - *Missing indicators*: Informative in themselves — absence of data may signal lack of monitoring or clinical concern.
   
-
 #### 2.4 Finalize Dataset
 
 * Pivot all features into wide format
 * Merge with outcome labels
-
----
 
 ## 🧼 Missing Data Handling
 
@@ -103,8 +92,6 @@ Time-series variables were engineered based on their clinical measurement freque
 * For **rare variables**, missing values were assumed to reflect normal test results (clinical assumption)
 * Imputed using the **midpoint of normal clinical ranges**, stratified by gender when necessary
 * Patients with >300 missing predictors were excluded
-
----
 
 ## 🧰 Predictive Modeling
 
@@ -142,7 +129,6 @@ Time-series variables were engineered based on their clinical measurement freque
 * Tuned multiple hyperparameters (tree depth, learning rate, loss reduction, etc) via Bayesian optimization
 * Slower learner; performed worse than LightGBM in this task
 
----
 
 ### 📊 Model Comparison
 
@@ -156,8 +142,6 @@ Time-series variables were engineered based on their clinical measurement freque
 
 > F1 score was chosen as the primary evaluation metric due to class imbalance.
 
----
-
 ## 🔎 Interpretation of Best Model (Lasso)
 
 Key predictors selected by Lasso included:
@@ -167,8 +151,6 @@ Key predictors selected by Lasso included:
 * **BUN\_min**, **Creatinine\_median**, **Bilirubin\_median** (+): Indicators of renal/liver dysfunction
 * **Na\_trend**, **HCO3\_trend** (+/–): Metabolic trends were informative
 * **Missingness indicators** (e.g., RespRate\_missing\_0, NISysABP\_missing\_24): Missing data can itself be a signal of poor monitoring or patient condition
-
----
 
 ## 📄 Files
 
